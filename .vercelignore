@@ -1,0 +1,12 @@
+.git
+.next
+node_modules
+.env
+.env.local
+.env.*
+*.log
+dev_server.log
+list-databases-test.mjs
+test-connection.mjs
+test-db-connection.js
+test-db-with-env.js
