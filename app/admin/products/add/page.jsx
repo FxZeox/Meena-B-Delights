@@ -1,8 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { FaArrowLeft, FaBoxOpen, FaCloudArrowUp, FaFloppyDisk } from 'react-icons/fa6'
 import { useBakeryStore } from '../../../../context/StoreContext'
 
@@ -25,20 +24,13 @@ const createProductId = (name) => {
 }
 
 export default function AddProductPage() {
-  const router = useRouter()
-  const { adminAuth, addProduct, uploadProductImage } = useBakeryStore()
+  const { addProduct, uploadProductImage } = useBakeryStore()
 
   const [isSaving, setIsSaving] = useState(false)
   const [formError, setFormError] = useState('')
   const [formSuccess, setFormSuccess] = useState('')
   const [draftImageFile, setDraftImageFile] = useState(null)
   const [draftProduct, setDraftProduct] = useState(defaultDraft)
-
-  useEffect(() => {
-    if (!adminAuth) {
-      router.push('/admin/login')
-    }
-  }, [adminAuth, router])
 
   const createProduct = async () => {
     setFormError('')

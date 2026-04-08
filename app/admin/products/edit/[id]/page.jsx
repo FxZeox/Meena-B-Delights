@@ -2,15 +2,13 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { FaArrowLeft, FaBoxOpen, FaCloudArrowUp, FaFloppyDisk } from 'react-icons/fa6'
 import { useBakeryStore } from '../../../../../context/StoreContext'
 
 export default function EditProductPage() {
-  const router = useRouter()
   const params = useParams()
   const {
-    adminAuth,
     catalog,
     catalogLoading,
     catalogError,
@@ -27,12 +25,6 @@ export default function EditProductPage() {
   const [formError, setFormError] = useState('')
   const [formSuccess, setFormSuccess] = useState('')
   const [draft, setDraft] = useState(null)
-
-  useEffect(() => {
-    if (!adminAuth) {
-      router.push('/admin/login')
-    }
-  }, [adminAuth, router])
 
   useEffect(() => {
     if (!draft && product) {

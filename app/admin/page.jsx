@@ -36,7 +36,6 @@ const hasImage = (value) => typeof value === 'string' && value.trim().length > 0
 export default function AdminPage() {
   const router = useRouter()
   const {
-    adminAuth,
     catalog,
     catalogLoading,
     catalogError,
@@ -47,17 +46,6 @@ export default function AdminPage() {
     refreshCatalog,
     logoutAdmin,
   } = useBakeryStore()
-
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    // Check if admin is authenticated
-    if (!adminAuth) {
-      router.push('/admin/login')
-    } else {
-      setIsLoading(false)
-    }
-  }, [adminAuth, router])
 
   const [tab, setTab] = useState('products')
   const [formError, setFormError] = useState('')
@@ -101,14 +89,14 @@ export default function AdminPage() {
       }
     }
 
-    if (adminAuth && tab === 'customers') {
+    if (tab === 'customers') {
       loadRegisteredUsersCount()
     }
 
     return () => {
       isMounted = false
     }
-  }, [adminAuth, tab])
+  }, [tab])
 
   const handleLogout = async () => {
     await fetch('/api/admin/logout', {
@@ -128,10 +116,6 @@ export default function AdminPage() {
       }
       setFormSuccess('Product deleted.')
     }
-  }
-
-  if (isLoading) {
-    return <div className="page-container"><p>Loading...</p></div>
   }
 
   return (
@@ -259,6 +243,14 @@ export default function AdminPage() {
               <div>
                 <strong>{order.id}</strong>
                 <p>{order.customerName}</p>
+                <p>
+                  Cakes:{' '}
+                  {Array.isArray(order.items) && order.items.length
+                    ? order.items
+                        .map((item) => `${item.name || 'Cake'} x${Number(item.quantity || 0)}`)
+                        .join(', ')
+                    : 'No items found'}
+                </p>
                 <p className="icon-text-inline">
                   <FaPhone />
                   {order.customerPhone || 'Phone not provided'}

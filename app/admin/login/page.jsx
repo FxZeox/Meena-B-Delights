@@ -30,7 +30,8 @@ export default function AdminLoginPage() {
 
       if (response.ok) {
         loginAdmin()
-        router.push('/admin')
+        router.replace('/admin')
+        router.refresh()
       } else {
         const data = await response.json().catch(() => ({}))
         setError(data.message || 'Invalid username or password')
