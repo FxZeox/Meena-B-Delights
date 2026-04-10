@@ -126,11 +126,14 @@ export default function HomePage() {
 
       <section className="content-section about-short" id="about">
         <div>
-          <h2>About Our Bakery</h2>
+          <h2>Discover Our Story</h2>
           <p>
-            Meena B started as a tiny neighborhood kitchen and has grown into a full dessert studio. We bake in
-            small batches, use high-quality ingredients, and focus on flavor that feels homemade yet premium.
+            Learn about our mission, core values, signature taste philosophy, and what makes Meena B Delights a
+            unique handcrafted dessert brand.
           </p>
+          <Link href="/about" className="btn btn-primary">
+            Read About Us
+          </Link>
         </div>
         <div className="contact-card">
           <h3>Contact</h3>

@@ -134,7 +134,7 @@ export default function AdminPage() {
         </button>
       </div>
 
-      <section className="admin-tabs">
+      <section className="admin-tabs admin-main-tabs">
         {['products', 'orders', 'customers'].map((name) => {
           const Icon = tabIcons[name]
           return (
@@ -166,7 +166,7 @@ export default function AdminPage() {
             </Link>
           </div>
           <div className="table-wrap">
-            <table>
+            <table className="admin-products-table">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -178,9 +178,9 @@ export default function AdminPage() {
               <tbody>
                 {catalog.map((item) => (
                   <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>Rs {Number(item.price || 0).toFixed(2)}</td>
-                    <td className="admin-image-cell">
+                    <td data-label="Name">{item.name}</td>
+                    <td data-label="Price">Rs {Number(item.price || 0).toFixed(2)}</td>
+                    <td className="admin-image-cell" data-label="Image">
                       <div className="admin-image-content">
                         {hasImage(item.image) ? (
                           <img className="admin-product-thumb" src={item.image} alt={item.name} />
@@ -199,7 +199,7 @@ export default function AdminPage() {
                         )}
                       </div>
                     </td>
-                    <td className="admin-action-cell">
+                    <td className="admin-action-cell" data-label="Action">
                       <div className="admin-product-actions">
                         <Link
                           href={`/admin/products/edit/${encodeURIComponent(item.id)}`}

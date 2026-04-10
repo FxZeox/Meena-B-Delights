@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import {
+  FaAward,
   FaCartShopping,
   FaEnvelope,
   FaFacebook,
@@ -33,6 +34,12 @@ export default function SiteFooter() {
         <div>
           <h4>Quick Links</h4>
           <ul>
+            <li>
+              <Link href="/about" className="icon-text">
+                <FaAward />
+                About Meena B
+              </Link>
+            </li>
             <li>
               <Link href="/products" className="icon-text">
                 <FaCartShopping />

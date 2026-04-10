@@ -8,7 +8,7 @@ import { FaCartShopping, FaMagnifyingGlass, FaUser } from 'react-icons/fa6'
 const links = [
   { href: '/', label: 'Home' },
   { href: '/products', label: 'Menu', hideOnMobile: true },
-  { href: '/#about', label: 'About' },
+  { href: '/about', label: 'About' },
   { href: '/track-order', label: 'Orders', hideOnMobile: true },
   { href: '/account', label: 'Account' },
   { href: '/admin', label: 'Admin' },

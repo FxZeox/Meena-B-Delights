@@ -15,44 +15,27 @@ const guestProfile = {
   address: 'Type your address in checkout to save it here.',
 }
 
+const defaultState = {
+  catalog: bakeryProducts,
+  cart: {},
+  orders: [],
+  profile: guestProfile,
+  content: {
+    heroTitle: 'Freshly Baked Happiness, Delivered Daily',
+    heroSubtitle:
+      'From celebration cakes to midnight cookie cravings, order handcrafted sweets in minutes.',
+  },
+  adminAuth: false,
+  customerAuth: false,
+  customerUserEmail: '',
+  customerUsers: [],
+}
+
 const normalizeEmail = (value) => String(value || '').trim().toLowerCase()
 
 function readInitialState() {
-  const defaultState = {
-    catalog: bakeryProducts,
-    cart: {},
-    orders: [],
-    profile: guestProfile,
-    content: {
-      heroTitle: 'Freshly Baked Happiness, Delivered Daily',
-      heroSubtitle:
-        'From celebration cakes to midnight cookie cravings, order handcrafted sweets in minutes.',
-    },
-    adminAuth: false,
-    customerAuth: false,
-    customerUserEmail: '',
-    customerUsers: [],
-  }
-
-  if (typeof window === 'undefined') {
-    return defaultState
-  }
-
-  const raw = window.localStorage.getItem(STORAGE_KEY)
-  if (!raw) {
-    return defaultState
-  }
-
-  try {
-    const parsed = JSON.parse(raw)
-    return {
-      ...defaultState,
-      ...parsed,
-      adminAuth: false,
-    }
-  } catch {
-    return defaultState
-  }
+  // Keep initial HTML deterministic for SSR/CSR hydration.
+  return defaultState
 }
 
 async function parseApiResponse(response) {
@@ -73,12 +56,41 @@ async function parseApiResponse(response) {
 
 export function BakeryStoreProvider({ children }) {
   const [state, setState] = useState(readInitialState)
+  const [storageReady, setStorageReady] = useState(false)
   const [catalogLoading, setCatalogLoading] = useState(false)
   const [catalogError, setCatalogError] = useState('')
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const raw = window.localStorage.getItem(STORAGE_KEY)
+    if (!raw) {
+      setStorageReady(true)
+      return
+    }
+
+    try {
+      const parsed = JSON.parse(raw)
+      setState((prev) => ({
+        ...prev,
+        ...parsed,
+        adminAuth: false,
+      }))
+    } catch {
+      // Ignore malformed persisted state and continue with defaults.
+    } finally {
+      setStorageReady(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!storageReady) {
+      return
+    }
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  }, [state])
+  }, [state, storageReady])
 
   const loadCatalog = useCallback(async () => {
     setCatalogLoading(true)
