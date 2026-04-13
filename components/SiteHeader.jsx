@@ -29,7 +29,7 @@ export default function SiteHeader() {
     <header className="site-header">
       <div className="header-inner">
         <Link href="/" className="brand">
-          <img src="/meena-b/logo.png" alt="Meena B Delights logo" className="brand-logo" />
+          <img src="/meena-b/logo-cropped.png" alt="Meena B Delights logo" className="brand-logo" />
         </Link>
 
         <nav className="main-nav">
