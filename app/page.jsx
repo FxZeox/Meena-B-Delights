@@ -7,7 +7,7 @@ import { bakeryCategories, bakeryProducts } from '../data/products'
 import { useBakeryStore } from '../context/StoreContext'
 import { FaEnvelope, FaPhone } from 'react-icons/fa6'
 
-const FALLBACK_HERO_IMAGE = '/meena-b/logo.png'
+const FALLBACK_HERO_IMAGE = '/meena-b/meena-b-delights-logo.jpeg'
 
 const hasImage = (value) => typeof value === 'string' && value.trim().length > 0
 
@@ -140,11 +140,11 @@ export default function HomePage() {
           <p>G11/4 Islamabad</p>
           <p className="icon-text">
             <FaPhone />
-            +92 300 1112233
+            03336266499
           </p>
           <p className="icon-text">
             <FaEnvelope />
-            hello@meenabdelights.com
+            sakeenaiqbal1962@gmail.com
           </p>
         </div>
       </section>

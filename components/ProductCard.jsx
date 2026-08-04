@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useBakeryStore } from '../context/StoreContext'
 import { FaCartPlus, FaMinus, FaPlus } from 'react-icons/fa6'
 
-const FALLBACK_PRODUCT_IMAGE = '/meena-b/logo.png'
+const FALLBACK_PRODUCT_IMAGE = '/meena-b/meena-b-delights-logo.jpeg'
 
 export default function ProductCard({ product }) {
   const { addToCart, cart, removeFromCart } = useBakeryStore()
@@ -51,7 +51,12 @@ export default function ProductCard({ product }) {
               ×
             </button>
             <img src={imageSrc} alt={product.name} className="product-preview-image" />
-            <p className="product-preview-title">{product.name}</p>
+            <div className="product-preview-content">
+              <p className="product-preview-category">{product.category}</p>
+              <h2>{product.name}</h2>
+              <p>{product.description}</p>
+              <strong>Rs {product.price}</strong>
+            </div>
           </div>
         </div>,
         document.body,
@@ -77,28 +82,38 @@ export default function ProductCard({ product }) {
         </button>
         <div className="product-body">
           <p className="product-category">{product.category}</p>
-          <h3>{product.name}</h3>
-          <p className="product-desc">{product.description}</p>
-          <div className="product-meta">
-            <strong className="icon-text-inline">Rs {product.price}</strong>
-          </div>
+          <button
+            type="button"
+            className="product-details-button"
+            onClick={() => setIsPreviewOpen(true)}
+            aria-label={`View full details for ${product.name}`}
+          >
+            <span className="product-title">{product.name}</span>
+            <span className="product-desc">{product.description}</span>
+          </button>
 
-          {qty === 0 ? (
-            <button className="btn btn-primary" onClick={() => addToCart(product.id)}>
-              <FaCartPlus />
-              Add To Cart
-            </button>
-          ) : (
-            <div className="qty-control">
-              <button aria-label="decrease" onClick={() => removeFromCart(product.id)}>
-                <FaMinus />
-              </button>
-              <span>{qty}</span>
-              <button aria-label="increase" onClick={() => addToCart(product.id)}>
-                <FaPlus />
-              </button>
+          <div className="product-buy-row">
+            <div className="product-meta">
+              <strong className="icon-text-inline">Rs {product.price}</strong>
             </div>
-          )}
+
+            {qty === 0 ? (
+              <button className="btn btn-primary product-cart-button" onClick={() => addToCart(product.id)}>
+                <FaCartPlus />
+                Add To Cart
+              </button>
+            ) : (
+              <div className="qty-control">
+                <button aria-label="decrease" onClick={() => removeFromCart(product.id)}>
+                  <FaMinus />
+                </button>
+                <span>{qty}</span>
+                <button aria-label="increase" onClick={() => addToCart(product.id)}>
+                  <FaPlus />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </article>
       {previewModal}

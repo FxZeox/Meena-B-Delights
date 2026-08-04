@@ -11,7 +11,6 @@ const links = [
   { href: '/about', label: 'About' },
   { href: '/track-order', label: 'Orders', hideOnMobile: true },
   { href: '/account', label: 'Account' },
-  { href: '/admin', label: 'Admin' },
 ]
 
 export default function SiteHeader() {
@@ -29,7 +28,14 @@ export default function SiteHeader() {
     <header className="site-header">
       <div className="header-inner">
         <Link href="/" className="brand">
-          <img src="/meena-b/logo-cropped.png" alt="Meena B Delights logo" className="brand-logo" />
+          <img src="/meena-b/meena-b-delights-logo.jpeg" alt="Meena B Delights logo" className="brand-logo" />
+          <span className="brand-copy">
+            <span className="brand-name" aria-label="Meena B">
+              <span>Meena</span>
+              <span>B</span>
+            </span>
+            <span className="brand-tagline">Delights</span>
+          </span>
         </Link>
 
         <nav className="main-nav">

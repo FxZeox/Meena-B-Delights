@@ -5,20 +5,15 @@ import { useRouter } from 'next/navigation'
 import { useBakeryStore } from '../../context/StoreContext'
 import { FaCartShopping, FaMinus, FaPlus, FaReceipt, FaTruckFast } from 'react-icons/fa6'
 
-const FALLBACK_PRODUCT_IMAGE = '/meena-b/logo.png'
+const FALLBACK_PRODUCT_IMAGE = '/meena-b/meena-b-delights-logo.jpeg'
 
 export default function CartPage() {
   const router = useRouter()
-  const { cartItems, cart, setCartQuantity, removeFromCart, addToCart, cartSubtotal, deliveryFee, total, customerAuth } =
+  const { cartItems, cart, setCartQuantity, removeFromCart, addToCart, cartSubtotal, deliveryFee, total } =
     useBakeryStore()
 
   const proceedToCheckout = () => {
-    if (customerAuth) {
-      router.push('/checkout')
-      return
-    }
-
-    router.push('/account?mode=signup&next=/checkout')
+    router.push('/checkout')
   }
 
   return (
@@ -88,7 +83,7 @@ export default function CartPage() {
                 <FaTruckFast />
                 Delivery
               </span>
-              <strong>Rs {deliveryFee.toFixed(2)}</strong>
+              <strong>{deliveryFee > 0 ? `Rs ${deliveryFee.toFixed(2)}` : 'Free'}</strong>
             </div>
             <div>
               <span>Total</span>

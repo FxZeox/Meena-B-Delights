@@ -8,7 +8,6 @@ import {
   FaPhone,
   FaTruckFast,
   FaUser,
-  FaYoutube,
 } from 'react-icons/fa6'
 
 export default function SiteFooter() {
@@ -16,18 +15,27 @@ export default function SiteFooter() {
     <footer className="site-footer" id="contact">
       <section className="footer-grid">
         <div>
-          <h3>Meena B Delights</h3>
+          <Link href="/" className="footer-brand">
+            <img src="/meena-b/meena-b-delights-logo.jpeg" alt="Meena B Delights logo" />
+            <span>
+              <strong aria-label="Meena B">
+                <span>Meena</span>
+                <span>B</span>
+              </strong>
+              <small>Delights</small>
+            </span>
+          </Link>
           <p>
             Baking cakes, cupcakes, pastries, donuts, cookies, brownies, and desserts with premium ingredients
             every day.
           </p>
           <p className="icon-text">
             <FaPhone />
-            Call: +92 300 1112233
+            Call: 03336266499
           </p>
           <p className="icon-text">
             <FaEnvelope />
-            Email: hello@meenabdelights.com
+            Email: sakeenaiqbal1962@gmail.com
           </p>
         </div>
 
@@ -71,23 +79,18 @@ export default function SiteFooter() {
           <h4>Follow Us</h4>
           <ul>
             <li>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="icon-text">
+              <a href="https://www.instagram.com/meenab_delights/" target="_blank" rel="noreferrer" className="icon-text">
                 <FaInstagram />
                 Instagram
               </a>
             </li>
             <li>
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="icon-text">
+              <a href="https://www.facebook.com/profile.php?id=61592997773976" target="_blank" rel="noreferrer" className="icon-text">
                 <FaFacebook />
                 Facebook
               </a>
             </li>
-            <li>
-              <a href="https://youtube.com" target="_blank" rel="noreferrer" className="icon-text">
-                <FaYoutube />
-                YouTube
-              </a>
-            </li>
+
           </ul>
         </div>
       </section>

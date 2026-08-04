@@ -47,65 +47,65 @@ export default function AdminLoginPage() {
 
   return (
     <div className="page-container">
-      <div className="login-wrapper">
-        <div className="login-card">
-          <div className="login-header">
-            <FaShieldHalved className="login-icon" />
-            <h1>Admin Login</h1>
-            <p>Access the admin dashboard</p>
-          </div>
+      <div className="page-header">
+        <h1 className="icon-text">
+          <FaShieldHalved />
+          Admin Login
+        </h1>
+        <p>Access the admin dashboard.</p>
+      </div>
 
-          <form onSubmit={handleLogin} className="login-form">
-            <div className="form-group">
-              <label htmlFor="username" className="icon-text-inline">
-                <FaUser />
-                Username
-              </label>
+      <section className="account-layout">
+        <form onSubmit={handleLogin} className="form-card">
+          <label htmlFor="username">
+            <span className="icon-text-inline">
+              <FaUser />
+              Username
+            </span>
+            <input
+              id="username"
+              type="text"
+              placeholder="Enter username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              disabled={loading}
+              required
+            />
+          </label>
+
+          <label htmlFor="password">
+            <span className="icon-text-inline">
+              <FaKey />
+              Password
+            </span>
+            <div className="password-field-wrapper">
               <input
-                id="username"
-                type="text"
-                placeholder="Enter username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
                 required
               />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
+          </label>
 
-            <div className="form-group">
-              <label htmlFor="password" className="icon-text-inline">
-                <FaKey />
-                Password
-              </label>
-              <div className="password-field-wrapper">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={loading}
-                  required
-                />
-                <button
-                  type="button"
-                  className="password-toggle-btn"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-            </div>
+          {error ? <p className="status-missing">{error}</p> : null}
 
-            {error && <div className="error-message">{error}</div>}
-
-            <button type="submit" className="btn btn-primary" disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
-            </button>
-          </form>
-        </div>
-      </div>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? 'Logging in...' : 'Sign In'}
+          </button>
+        </form>
+      </section>
     </div>
   )
 }

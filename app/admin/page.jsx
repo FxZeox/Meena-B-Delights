@@ -7,6 +7,7 @@ import { useBakeryStore } from '../../context/StoreContext'
 import {
   FaBoxOpen,
   FaClipboardList,
+  FaCircleInfo,
   FaLocationDot,
   FaMoneyCheckDollar,
   FaPhone,
@@ -22,6 +23,7 @@ const tabIcons = {
   products: FaBoxOpen,
   orders: FaClipboardList,
   customers: FaUser,
+  about: FaCircleInfo,
 }
 
 const progressOptions = [
@@ -41,15 +43,22 @@ export default function AdminPage() {
     catalogError,
     orders,
     profile,
+    content,
     updateOrderStatus,
     deleteProduct,
     refreshCatalog,
+    updateAboutContent,
     logoutAdmin,
   } = useBakeryStore()
 
   const [tab, setTab] = useState('products')
+  const [aboutForm, setAboutForm] = useState(() => ({
+    ...content.about,
+    coreValuesText: content.about.coreValues.join('\n'),
+  }))
   const [formError, setFormError] = useState('')
   const [formSuccess, setFormSuccess] = useState('')
+  const [aboutSuccess, setAboutSuccess] = useState('')
   const [registeredUsersCount, setRegisteredUsersCount] = useState(0)
   const [registeredUsersLoading, setRegisteredUsersLoading] = useState(true)
   const [registeredUsersError, setRegisteredUsersError] = useState('')
@@ -59,6 +68,13 @@ export default function AdminPage() {
     () => orders.filter((order) => order.status !== 'Cancelled'),
     [orders],
   )
+
+  useEffect(() => {
+    setAboutForm({
+      ...content.about,
+      coreValuesText: content.about.coreValues.join('\n'),
+    })
+  }, [content.about])
 
   useEffect(() => {
     let isMounted = true
@@ -118,6 +134,47 @@ export default function AdminPage() {
     }
   }
 
+  const updateAboutField = (field, value) => {
+    setAboutSuccess('')
+    setAboutForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }))
+  }
+
+  const updateAboutNicheItem = (index, field, value) => {
+    setAboutSuccess('')
+    setAboutForm((prev) => ({
+      ...prev,
+      nicheItems: prev.nicheItems.map((item, itemIndex) =>
+        itemIndex === index ? { ...item, [field]: value } : item,
+      ),
+    }))
+  }
+
+  const handleSaveAbout = () => {
+    updateAboutContent({
+      eyebrow: aboutForm.eyebrow.trim(),
+      title: aboutForm.title.trim(),
+      description: aboutForm.description.trim(),
+      coreValuesTitle: aboutForm.coreValuesTitle.trim(),
+      coreValues: aboutForm.coreValuesText
+        .split('\n')
+        .map((item) => item.trim())
+        .filter(Boolean),
+      advantageTitle: aboutForm.advantageTitle.trim(),
+      advantageText: aboutForm.advantageText.trim(),
+      nicheTitle: aboutForm.nicheTitle.trim(),
+      nicheItems: aboutForm.nicheItems.map((item) => ({
+        title: item.title.trim(),
+        description: item.description.trim(),
+      })),
+      ctaTitle: aboutForm.ctaTitle.trim(),
+      ctaText: aboutForm.ctaText.trim(),
+    })
+    setAboutSuccess('About section updated.')
+  }
+
   return (
     <div className="page-container">
       <div className="admin-header-with-logout">
@@ -135,7 +192,7 @@ export default function AdminPage() {
       </div>
 
       <section className="admin-tabs admin-main-tabs">
-        {['products', 'orders', 'customers'].map((name) => {
+        {['products', 'orders', 'customers', 'about'].map((name) => {
           const Icon = tabIcons[name]
           return (
             <button key={name} className={tab === name ? 'active-tab' : ''} onClick={() => setTab(name)}>
@@ -257,8 +314,14 @@ export default function AdminPage() {
                 </p>
                 <p className="icon-text-inline">
                   <FaLocationDot />
-                  {order.address || 'Address not provided'}
+                  Area/Landmark: {order.customerArea || 'Area not provided'}
                 </p>
+                <p className="icon-text-inline">
+                  <FaLocationDot />
+                  Address: {order.address || 'Address not provided'}
+                </p>
+                {order.notes ? <p>Notes: {order.notes}</p> : null}
+                <p>Delivery: Free</p>
                 <p className="icon-text-inline">
                   <FaMoneyCheckDollar />
                   Rs {order.total.toFixed(2)}
@@ -296,6 +359,126 @@ export default function AdminPage() {
             <li>Phone: {profile.phone}</li>
             <li>Address: {profile.address}</li>
           </ul>
+        </section>
+      ) : null}
+
+      {tab === 'about' ? (
+        <section className="admin-panel">
+          <h3 className="icon-text">
+            <FaCircleInfo />
+            About Section Editor
+          </h3>
+          {aboutSuccess ? <p className="status-good">{aboutSuccess}</p> : null}
+
+          <div className="admin-form-grid">
+            <label>
+              Eyebrow Text
+              <input
+                value={aboutForm.eyebrow}
+                onChange={(event) => updateAboutField('eyebrow', event.target.value)}
+              />
+            </label>
+
+            <label>
+              Main Heading
+              <input
+                value={aboutForm.title}
+                onChange={(event) => updateAboutField('title', event.target.value)}
+              />
+            </label>
+
+            <label>
+              Main Paragraph
+              <textarea
+                value={aboutForm.description}
+                onChange={(event) => updateAboutField('description', event.target.value)}
+                rows={5}
+              />
+            </label>
+
+            <label>
+              Core Values Heading
+              <input
+                value={aboutForm.coreValuesTitle}
+                onChange={(event) => updateAboutField('coreValuesTitle', event.target.value)}
+              />
+            </label>
+
+            <label>
+              Core Values
+              <textarea
+                value={aboutForm.coreValuesText}
+                onChange={(event) => updateAboutField('coreValuesText', event.target.value)}
+                rows={6}
+              />
+            </label>
+
+            <label>
+              Advantage Heading
+              <input
+                value={aboutForm.advantageTitle}
+                onChange={(event) => updateAboutField('advantageTitle', event.target.value)}
+              />
+            </label>
+
+            <label>
+              Advantage Paragraph
+              <textarea
+                value={aboutForm.advantageText}
+                onChange={(event) => updateAboutField('advantageText', event.target.value)}
+                rows={4}
+              />
+            </label>
+
+            <label>
+              Niche Section Heading
+              <input
+                value={aboutForm.nicheTitle}
+                onChange={(event) => updateAboutField('nicheTitle', event.target.value)}
+              />
+            </label>
+
+            {aboutForm.nicheItems.map((item, index) => (
+              <div key={`about-niche-${index}`} className="admin-niche-edit">
+                <label>
+                  Niche Card {index + 1} Heading
+                  <input
+                    value={item.title}
+                    onChange={(event) => updateAboutNicheItem(index, 'title', event.target.value)}
+                  />
+                </label>
+                <label>
+                  Niche Card {index + 1} Paragraph
+                  <textarea
+                    value={item.description}
+                    onChange={(event) => updateAboutNicheItem(index, 'description', event.target.value)}
+                    rows={3}
+                  />
+                </label>
+              </div>
+            ))}
+
+            <label>
+              CTA Heading
+              <input
+                value={aboutForm.ctaTitle}
+                onChange={(event) => updateAboutField('ctaTitle', event.target.value)}
+              />
+            </label>
+
+            <label>
+              CTA Paragraph
+              <textarea
+                value={aboutForm.ctaText}
+                onChange={(event) => updateAboutField('ctaText', event.target.value)}
+                rows={3}
+              />
+            </label>
+
+            <button className="btn btn-primary" onClick={handleSaveAbout}>
+              Save About Section
+            </button>
+          </div>
         </section>
       ) : null}
     </div>

@@ -3,6 +3,7 @@ import { Pacifico, Poppins } from 'next/font/google'
 import Providers from './providers'
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
+import WhatsAppButton from '../components/WhatsAppButton'
 
 const headingFont = Pacifico({
   subsets: ['latin'],
@@ -20,6 +21,10 @@ export const metadata = {
   title: 'Meena B Delights',
   description:
     'Order fresh cakes, cupcakes, donuts, pastries, cookies, brownies, and desserts online with easy tracking.',
+  icons: {
+    icon: '/meena-b/meena-b-delights-logo.jpeg',
+    apple: '/meena-b/meena-b-delights-logo.jpeg',
+  },
 }
 
 export default function RootLayout({ children }) {
@@ -30,6 +35,7 @@ export default function RootLayout({ children }) {
           <SiteHeader />
           <main className="page-shell">{children}</main>
           <SiteFooter />
+          <WhatsAppButton />
         </Providers>
       </body>
     </html>

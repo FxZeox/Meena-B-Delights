@@ -15,16 +15,63 @@ const guestProfile = {
   address: 'Type your address in checkout to save it here.',
 }
 
+const defaultAboutContent = {
+  eyebrow: 'About Meena B Delights',
+  title: 'Crafted with Purity, Served with Heart',
+  description:
+    'At Meena B Delights, our mission is to craft pure, flavourful creations using premium ingredients, fresh milk, and hygienic preparation-offering hand crafted chocolates, cakes, cookies, and wellness-friendly options like sugar-free treats. Every product is made with care and personalized with your name, turning every box into a story of quality, taste, and heartfelt delight.',
+  coreValuesTitle: 'Core Values',
+  coreValues: [
+    'Premium Quality',
+    'Thoughtful Crafting',
+    'Signature Taste',
+    'Pure Ingredients',
+    'Freshness and Hygienic Environment',
+    'Commitment to Excellence',
+  ],
+  advantageTitle: 'Comparative Advantage',
+  advantageText:
+    'Meena B Delights stands out for its pure ingredients, premium quality, and trusted hygiene-offering fresh, handcrafted creations with signature flavors that not only leave a lasting impression but tell a story in every bite.',
+  nicheTitle: 'MB Delights Differentiated Niche Offering',
+  nicheItems: [
+    {
+      title: 'Blended Chocolate Innovation',
+      description:
+        'Unique combinations of milk, white, and dark chocolate blended with real fruits, dry fruits, and signature cookie bits.',
+    },
+    {
+      title: 'Personalized Gifting Experience',
+      description:
+        'Custom boxes beautifully tagged with customer names or messages, making every order a thoughtful gift.',
+    },
+    {
+      title: 'Freshly Made, Not Factory Made',
+      description:
+        'Everything is made-to-order in a hygienic environment ensuring freshness, safety, and signature quality in every bite and sip.',
+    },
+    {
+      title: 'Luxury Meets Storytelling',
+      description:
+        'Every product whether it is cake, chocolate, or frozen food items is crafted to tell a story, celebrate a moment, or share a memory.',
+    },
+  ],
+  ctaTitle: 'Ready to Taste the Story?',
+  ctaText: 'Explore handcrafted favorites made fresh for your celebrations, gifting, and everyday cravings.',
+}
+
+const defaultContent = {
+  heroTitle: 'Freshly Baked Happiness, Delivered Daily',
+  heroSubtitle:
+    'From celebration cakes to midnight cookie cravings, order handcrafted sweets in minutes.',
+  about: defaultAboutContent,
+}
+
 const defaultState = {
   catalog: bakeryProducts,
   cart: {},
   orders: [],
   profile: guestProfile,
-  content: {
-    heroTitle: 'Freshly Baked Happiness, Delivered Daily',
-    heroSubtitle:
-      'From celebration cakes to midnight cookie cravings, order handcrafted sweets in minutes.',
-  },
+  content: defaultContent,
   adminAuth: false,
   customerAuth: false,
   customerUserEmail: '',
@@ -32,6 +79,23 @@ const defaultState = {
 }
 
 const normalizeEmail = (value) => String(value || '').trim().toLowerCase()
+
+const mergeContent = (content = {}) => ({
+  ...defaultContent,
+  ...content,
+  about: {
+    ...defaultAboutContent,
+    ...(content.about || {}),
+    nicheItems:
+      Array.isArray(content.about?.nicheItems) && content.about.nicheItems.length
+        ? content.about.nicheItems
+        : defaultAboutContent.nicheItems,
+    coreValues:
+      Array.isArray(content.about?.coreValues) && content.about.coreValues.length
+        ? content.about.coreValues
+        : defaultAboutContent.coreValues,
+  },
+})
 
 function readInitialState() {
   // Keep initial HTML deterministic for SSR/CSR hydration.
@@ -76,6 +140,7 @@ export function BakeryStoreProvider({ children }) {
       setState((prev) => ({
         ...prev,
         ...parsed,
+        content: mergeContent(parsed.content),
         adminAuth: false,
       }))
     } catch {
@@ -297,7 +362,29 @@ export function BakeryStoreProvider({ children }) {
     }))
   }
 
-  const placeOrder = ({ address, paymentMethod, notes = '', deliveryFee = 0 }) => {
+  const updateAboutContent = (payload) => {
+    setState((prev) => ({
+      ...prev,
+      content: {
+        ...prev.content,
+        about: {
+          ...defaultAboutContent,
+          ...(prev.content.about || {}),
+          ...payload,
+        },
+      },
+    }))
+  }
+
+  const placeOrder = ({
+    address,
+    paymentMethod,
+    notes = '',
+    deliveryFee = 0,
+    customerName,
+    customerPhone,
+    customerArea,
+  }) => {
     const items = state.catalog
       .filter((product) => state.cart[product.id])
       .map((product) => ({
@@ -332,8 +419,9 @@ export function BakeryStoreProvider({ children }) {
       paymentMethod,
       address,
       notes,
-      customerName: state.profile.fullName,
-      customerPhone: state.profile.phone || '',
+      customerName: String(customerName || state.profile.fullName || 'Guest Customer').trim(),
+      customerPhone: String(customerPhone || state.profile.phone || '').trim(),
+      customerArea: String(customerArea || '').trim(),
     }
 
     setState((prev) => ({
@@ -342,6 +430,8 @@ export function BakeryStoreProvider({ children }) {
       cart: {},
       profile: {
         ...prev.profile,
+        fullName: String(customerName || prev.profile.fullName || '').trim(),
+        phone: String(customerPhone || prev.profile.phone || '').trim(),
         address,
       },
       catalog: prev.catalog.map((product) => {
@@ -591,7 +681,7 @@ export function BakeryStoreProvider({ children }) {
     [cartItems, state.cart],
   )
 
-  const deliveryFee = cartSubtotal > 0 ? 200 : 0
+  const deliveryFee = 0
   const total = cartSubtotal + deliveryFee
 
   const value = {
@@ -622,6 +712,7 @@ export function BakeryStoreProvider({ children }) {
     uploadProductImage,
     refreshCatalog: loadCatalog,
     updateHomeContent,
+    updateAboutContent,
     loginAdmin,
     logoutAdmin,
     signupCustomer,
