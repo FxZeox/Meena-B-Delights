@@ -5,9 +5,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { FaArrowLeft, FaBoxOpen, FaCloudArrowUp, FaFloppyDisk } from 'react-icons/fa6'
 import { useBakeryStore } from '../../../../../context/StoreContext'
-import { bakeryCategories } from '../../../../../data/products'
-
-const productCategoryOptions = bakeryCategories.filter((category) => category !== 'All')
+import {
+  adminMainCategories,
+  cakeCategoryOptions,
+  getMainBakeryCategory,
+  isCakeCategory,
+} from '../../../../../data/products'
 
 export default function EditProductPage() {
   const params = useParams()
@@ -28,6 +31,7 @@ export default function EditProductPage() {
   const [formError, setFormError] = useState('')
   const [formSuccess, setFormSuccess] = useState('')
   const [draft, setDraft] = useState(null)
+  const selectedMainCategory = getMainBakeryCategory(draft?.category || 'Cakes')
 
   useEffect(() => {
     if (!draft && product) {
@@ -39,6 +43,17 @@ export default function EditProductPage() {
       })
     }
   }, [draft, product])
+
+  const updateMainCategory = (category) => {
+    setDraft((prev) =>
+      prev
+        ? {
+            ...prev,
+            category: category === 'Cakes' ? 'Fresh Cakes' : category,
+          }
+        : prev,
+    )
+  }
 
   const saveProduct = async () => {
     if (!product || !draft) {
@@ -169,16 +184,29 @@ export default function EditProductPage() {
               onChange={(event) => setDraft((prev) => ({ ...prev, name: event.target.value }))}
             />
             <select
-              aria-label="Category"
-              value={draft.category}
-              onChange={(event) => setDraft((prev) => ({ ...prev, category: event.target.value }))}
+              aria-label="Main category"
+              value={selectedMainCategory}
+              onChange={(event) => updateMainCategory(event.target.value)}
             >
-              {productCategoryOptions.map((category) => (
+              {adminMainCategories.map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
               ))}
             </select>
+            {isCakeCategory(draft.category) ? (
+              <select
+                aria-label="Cake type"
+                value={draft.category}
+                onChange={(event) => setDraft((prev) => ({ ...prev, category: event.target.value }))}
+              >
+                {cakeCategoryOptions.map((category) => (
+                  <option key={category} value={category}>
+                    {category === 'Cakes' ? 'Cakes (General)' : category}
+                  </option>
+                ))}
+              </select>
+            ) : null}
             <input
               type="number"
               className="price-input"

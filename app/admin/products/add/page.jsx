@@ -4,7 +4,12 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { FaArrowLeft, FaBoxOpen, FaCloudArrowUp, FaFloppyDisk } from 'react-icons/fa6'
 import { useBakeryStore } from '../../../../context/StoreContext'
-import { bakeryCategories } from '../../../../data/products'
+import {
+  adminMainCategories,
+  cakeCategoryOptions,
+  getMainBakeryCategory,
+  isCakeCategory,
+} from '../../../../data/products'
 
 const defaultDraft = {
   name: '',
@@ -12,8 +17,6 @@ const defaultDraft = {
   price: '',
   description: '',
 }
-
-const productCategoryOptions = bakeryCategories.filter((category) => category !== 'All')
 
 const createProductId = (name) => {
   const base = String(name || '')
@@ -34,6 +37,14 @@ export default function AddProductPage() {
   const [formSuccess, setFormSuccess] = useState('')
   const [draftImageFile, setDraftImageFile] = useState(null)
   const [draftProduct, setDraftProduct] = useState(defaultDraft)
+  const selectedMainCategory = getMainBakeryCategory(draftProduct.category)
+
+  const updateMainCategory = (category) => {
+    setDraftProduct((prev) => ({
+      ...prev,
+      category: category === 'Cakes' ? 'Fresh Cakes' : category,
+    }))
+  }
 
   const createProduct = async () => {
     setFormError('')
@@ -121,16 +132,29 @@ export default function AddProductPage() {
             onChange={(event) => setDraftProduct((prev) => ({ ...prev, name: event.target.value }))}
           />
           <select
-            aria-label="Category"
-            value={draftProduct.category}
-            onChange={(event) => setDraftProduct((prev) => ({ ...prev, category: event.target.value }))}
+            aria-label="Main category"
+            value={selectedMainCategory}
+            onChange={(event) => updateMainCategory(event.target.value)}
           >
-            {productCategoryOptions.map((category) => (
+            {adminMainCategories.map((category) => (
               <option key={category} value={category}>
                 {category}
               </option>
             ))}
           </select>
+          {isCakeCategory(draftProduct.category) ? (
+            <select
+              aria-label="Cake type"
+              value={draftProduct.category}
+              onChange={(event) => setDraftProduct((prev) => ({ ...prev, category: event.target.value }))}
+            >
+              {cakeCategoryOptions.map((category) => (
+                <option key={category} value={category}>
+                  {category === 'Cakes' ? 'Cakes (General)' : category}
+                </option>
+              ))}
+            </select>
+          ) : null}
           <input
             type="number"
             className="price-input"

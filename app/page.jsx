@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import ProductCard from '../components/ProductCard'
-import { bakeryCategories, bakeryProducts } from '../data/products'
+import { bakeryProducts, mainBakeryCategories } from '../data/products'
 import { useBakeryStore } from '../context/StoreContext'
 import { FaEnvelope, FaPhone } from 'react-icons/fa6'
 
@@ -63,7 +63,6 @@ export default function HomePage() {
               />
               <div className="hero-slide-overlay">
                 <h3>{slide.name}</h3>
-                {slide.description ? <p>{slide.description}</p> : null}
               </div>
             </article>
           ))}
@@ -110,8 +109,8 @@ export default function HomePage() {
           <h2>Shop By Category</h2>
         </div>
         <div className="category-list">
-          {bakeryCategories
-            .filter((cat) => cat !== 'All')
+          {mainBakeryCategories
+            .filter((category) => category !== 'All')
             .map((category) => (
               <Link key={category} href={`/products?category=${category}`} className="category-chip">
                 {category}

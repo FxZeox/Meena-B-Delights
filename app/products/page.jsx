@@ -2,12 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import ProductCard from '../../components/ProductCard'
-import { bakeryCategories } from '../../data/products'
+import { cakeSubcategories, mainBakeryCategories } from '../../data/products'
 import { useBakeryStore } from '../../context/StoreContext'
 import { FaMagnifyingGlass, FaUtensils } from 'react-icons/fa6'
-
-const cakeSubcategories = ['Fresh Cakes', 'Butter Cakes', 'Dry Cakes']
-const mainCategories = bakeryCategories.filter((item) => !cakeSubcategories.includes(item))
 
 export default function ProductsPage() {
   const { catalog, refreshCatalog } = useBakeryStore()
@@ -67,7 +64,7 @@ export default function ProductsPage() {
           />
         </div>
         <div className="category-list">
-          {mainCategories.map((item) => (
+          {mainBakeryCategories.map((item) => (
             <button
               key={item}
               className={item === category ? 'category-chip active-chip' : 'category-chip'}

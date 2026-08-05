@@ -1,9 +1,9 @@
+export const cakeSubcategories = ['Fresh Cakes', 'Butter Cakes', 'Dry Cakes']
+
 export const bakeryCategories = [
   'All',
   'Cakes',
-  'Fresh Cakes',
-  'Butter Cakes',
-  'Dry Cakes',
+  ...cakeSubcategories,
   'Cupcakes',
   'Pastries',
   'Donuts',
@@ -11,6 +11,12 @@ export const bakeryCategories = [
   'Brownies',
   'Desserts',
 ]
+
+export const mainBakeryCategories = bakeryCategories.filter((category) => !cakeSubcategories.includes(category))
+export const adminMainCategories = mainBakeryCategories.filter((category) => category !== 'All')
+export const cakeCategoryOptions = ['Cakes', ...cakeSubcategories]
+export const isCakeCategory = (category) => category === 'Cakes' || cakeSubcategories.includes(category)
+export const getMainBakeryCategory = (category) => (isCakeCategory(category) ? 'Cakes' : category)
 
 export const bakeryProducts = [
   {
