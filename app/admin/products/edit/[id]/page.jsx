@@ -5,6 +5,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { FaArrowLeft, FaBoxOpen, FaCloudArrowUp, FaFloppyDisk } from 'react-icons/fa6'
 import { useBakeryStore } from '../../../../../context/StoreContext'
+import { bakeryCategories } from '../../../../../data/products'
+
+const productCategoryOptions = bakeryCategories.filter((category) => category !== 'All')
 
 export default function EditProductPage() {
   const params = useParams()
@@ -165,11 +168,17 @@ export default function EditProductPage() {
               value={draft.name}
               onChange={(event) => setDraft((prev) => ({ ...prev, name: event.target.value }))}
             />
-            <input
-              placeholder="Category"
+            <select
+              aria-label="Category"
               value={draft.category}
               onChange={(event) => setDraft((prev) => ({ ...prev, category: event.target.value }))}
-            />
+            >
+              {productCategoryOptions.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
             <input
               type="number"
               className="price-input"

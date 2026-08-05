@@ -6,6 +6,9 @@ import { bakeryCategories } from '../../data/products'
 import { useBakeryStore } from '../../context/StoreContext'
 import { FaMagnifyingGlass, FaUtensils } from 'react-icons/fa6'
 
+const cakeSubcategories = ['Fresh Cakes', 'Butter Cakes', 'Dry Cakes']
+const mainCategories = bakeryCategories.filter((item) => !cakeSubcategories.includes(item))
+
 export default function ProductsPage() {
   const { catalog, refreshCatalog } = useBakeryStore()
 
@@ -34,12 +37,16 @@ export default function ProductsPage() {
   const filtered = useMemo(
     () =>
       catalog.filter((item) => {
-        const categoryMatch = category === 'All' || item.category === category
+        const categoryMatch =
+          category === 'All' ||
+          item.category === category ||
+          (category === 'Cakes' && (cakeSubcategories.includes(item.category) || item.category === 'Cakes'))
         const queryMatch = item.name.toLowerCase().includes(query.toLowerCase())
         return categoryMatch && queryMatch
       }),
     [catalog, category, query],
   )
+  const showCakeSubcategories = category === 'Cakes' || cakeSubcategories.includes(category)
 
   return (
     <div className="page-container">
@@ -60,7 +67,7 @@ export default function ProductsPage() {
           />
         </div>
         <div className="category-list">
-          {bakeryCategories.map((item) => (
+          {mainCategories.map((item) => (
             <button
               key={item}
               className={item === category ? 'category-chip active-chip' : 'category-chip'}
@@ -70,6 +77,19 @@ export default function ProductsPage() {
             </button>
           ))}
         </div>
+        {showCakeSubcategories ? (
+          <div className="category-list category-sub-list" aria-label="Cake subcategories">
+            {cakeSubcategories.map((item) => (
+              <button
+                key={item}
+                className={item === category ? 'category-chip active-chip' : 'category-chip'}
+                onClick={() => setCategory(item)}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </section>
 
       <section className="product-grid">

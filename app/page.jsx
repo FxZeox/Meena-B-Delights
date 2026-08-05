@@ -10,19 +10,23 @@ import { FaEnvelope, FaPhone } from 'react-icons/fa6'
 const FALLBACK_HERO_IMAGE = '/meena-b/meena-b-delights-logo.jpeg'
 
 const hasImage = (value) => typeof value === 'string' && value.trim().length > 0
+const getProductTime = (product) => Date.parse(product.updatedAt || product.createdAt || '') || 0
 
 export default function HomePage() {
   const { catalog } = useBakeryStore()
   const [activeSlide, setActiveSlide] = useState(0)
 
   const heroSlides = useMemo(() => {
-    const latestUploads = catalog.filter((item) => hasImage(item.image)).slice(0, 5)
+    const latestUploads = catalog
+      .filter((item) => hasImage(item.image))
+      .sort((a, b) => getProductTime(b) - getProductTime(a))
+      .slice(0, 6)
 
     if (latestUploads.length) {
       return latestUploads
     }
 
-    return bakeryProducts.filter((item) => hasImage(item.image)).slice(0, 5)
+    return bakeryProducts.filter((item) => hasImage(item.image)).slice(0, 6)
   }, [catalog])
 
   useEffect(() => {
@@ -40,20 +44,11 @@ export default function HomePage() {
 
   const featured = catalog.filter((item) => item.featured).slice(0, 6)
   const bestSellers = catalog.filter((item) => item.bestSeller).slice(0, 6)
-  const heroTitle = 'Freshly Baked Happiness, Delivered Daily'
-  const heroSubtitle = 'From celebration cakes to midnight cookie cravings, order handcrafted sweets in minutes.'
-  const heroSlogan = 'Where Taste is legacy and Quality is law'
 
   return (
     <div className="home-page">
       <section className="hero-section">
-        <div className="hero-content">
-          <p className="eyebrow">Freshly Baked Every Morning</p>
-          <h1>{heroTitle}</h1>
-          <p>{heroSubtitle}</p>
-          <p className="hero-slogan">{heroSlogan}</p>
-        </div>
-        <div className="hero-media hero-slider" aria-label="Latest product showcase">
+        <div className="hero-slider" aria-label="Latest product showcase">
           {heroSlides.map((slide, index) => (
             <article
               key={slide.id}
@@ -68,6 +63,7 @@ export default function HomePage() {
               />
               <div className="hero-slide-overlay">
                 <h3>{slide.name}</h3>
+                {slide.description ? <p>{slide.description}</p> : null}
               </div>
             </article>
           ))}

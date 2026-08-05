@@ -4,13 +4,16 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { FaArrowLeft, FaBoxOpen, FaCloudArrowUp, FaFloppyDisk } from 'react-icons/fa6'
 import { useBakeryStore } from '../../../../context/StoreContext'
+import { bakeryCategories } from '../../../../data/products'
 
 const defaultDraft = {
   name: '',
-  category: 'Cakes',
+  category: 'Fresh Cakes',
   price: '',
   description: '',
 }
+
+const productCategoryOptions = bakeryCategories.filter((category) => category !== 'All')
 
 const createProductId = (name) => {
   const base = String(name || '')
@@ -117,11 +120,17 @@ export default function AddProductPage() {
             value={draftProduct.name}
             onChange={(event) => setDraftProduct((prev) => ({ ...prev, name: event.target.value }))}
           />
-          <input
-            placeholder="Category"
+          <select
+            aria-label="Category"
             value={draftProduct.category}
             onChange={(event) => setDraftProduct((prev) => ({ ...prev, category: event.target.value }))}
-          />
+          >
+            {productCategoryOptions.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
           <input
             type="number"
             className="price-input"

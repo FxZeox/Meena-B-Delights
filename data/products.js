@@ -1,6 +1,9 @@
 export const bakeryCategories = [
   'All',
   'Cakes',
+  'Fresh Cakes',
+  'Butter Cakes',
+  'Dry Cakes',
   'Cupcakes',
   'Pastries',
   'Donuts',
@@ -13,7 +16,7 @@ export const bakeryProducts = [
   {
     id: 'cake-01',
     name: 'Strawberry Velvet Cake',
-    category: 'Cakes',
+    category: 'Fresh Cakes',
     price: 34,
     stock: 12,
     bestSeller: true,
@@ -26,7 +29,7 @@ export const bakeryProducts = [
   {
     id: 'cake-02',
     name: 'Triple Chocolate Truffle Cake',
-    category: 'Cakes',
+    category: 'Butter Cakes',
     price: 38,
     stock: 10,
     bestSeller: true,
