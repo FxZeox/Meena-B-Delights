@@ -112,7 +112,7 @@ export default function CheckoutPage() {
               type="tel"
               value={customerPhone}
               onChange={(event) => setCustomerPhone(event.target.value)}
-              placeholder="03336266499"
+              placeholder="03369364888"
             />
           </label>
 

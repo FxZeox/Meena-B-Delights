@@ -1,6 +1,6 @@
 import { FaWhatsapp } from 'react-icons/fa6'
 
-const whatsappNumber = '923336266499'
+const whatsappNumber = '923369364888'
 const whatsappMessage =
   'Hello Meena B Delights, I want to place an order. Please guide me with the menu and delivery details.'
 

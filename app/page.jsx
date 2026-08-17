@@ -135,7 +135,7 @@ export default function HomePage() {
           <p>G11/4 Islamabad</p>
           <p className="icon-text">
             <FaPhone />
-            03336266499
+            03369364888
           </p>
           <p className="icon-text">
             <FaEnvelope />

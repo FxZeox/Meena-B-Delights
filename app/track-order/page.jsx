@@ -72,7 +72,7 @@ export default function TrackOrderPage() {
             <FaMagnifyingGlass className="input-icon" />
             <input
               type="tel"
-              placeholder="Example: 03336266499"
+              placeholder="Example: 03369364888"
               value={phone}
               onChange={(event) => setPhone(event.target.value)}
             />

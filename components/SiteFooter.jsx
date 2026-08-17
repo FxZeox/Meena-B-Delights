@@ -31,7 +31,7 @@ export default function SiteFooter() {
           </p>
           <p className="icon-text">
             <FaPhone />
-            Call: 03336266499
+            Call: 03369364888
           </p>
           <p className="icon-text">
             <FaEnvelope />
